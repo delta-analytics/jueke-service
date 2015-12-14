@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+jueke-service.iml
+target
+*.log
+logs
