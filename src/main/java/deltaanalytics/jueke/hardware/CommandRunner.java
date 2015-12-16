@@ -17,8 +17,8 @@ public class CommandRunner {
     private InputStream inputStream;
     private JuekeStatusRepository juekeStatusRepository;
 
-    public CommandRunner() throws Exception {
-        JuekeSerialConnection juekeSerialConnection = new JuekeSerialConnectionFactory().connect();
+    public CommandRunner(String serialPortName) throws Exception {
+        JuekeSerialConnection juekeSerialConnection = new JuekeSerialConnectionFactory().connect(serialPortName);
         inputStream = juekeSerialConnection.getInputStream();
         outputStream = juekeSerialConnection.getOutputStream();
         juekeStatusRepository = new JuekeStatusRepository();
