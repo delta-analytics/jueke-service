@@ -1,17 +1,15 @@
-package deltaanalytics.jueke.hardware.factory;
+package deltaanalytics.jueke.hardware.domain;
 
 import deltaanalytics.jueke.data.entity.JuekeStatus;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Ignore
 public class JuekeStatusFactoryTest {
     @Test
-    public void buildFrom26Bytes(){
+    public void buildFrom26Bytes() {
         JuekeStatusFactory juekeStatusFactory = new JuekeStatusFactory();
 
         byte[] juekeByteResponse = buildJuekeResponseBytes();
@@ -56,31 +54,32 @@ public class JuekeStatusFactoryTest {
         JuekeStatus juekeStatus = new JuekeStatus();
         juekeStatus.setStart((byte) 1);
         juekeStatus.setNumberOfBytes((byte) 26);
-        juekeStatus.setStatusOfPump(true);
-        juekeStatus.setPressureRegulationActive(true);
-        juekeStatus.setTemperatureOfHeaterOk(true);
+        juekeStatus.setStatusOfPump(false);
+        juekeStatus.setPressureRegulationActive(false);
+        juekeStatus.setTemperatureOfHeaterOk(false);
         juekeStatus.setHeaterRegulationActive(true);
-        juekeStatus.setErrorFlags((byte)1);
-        juekeStatus.setErrorCode(1);
-        juekeStatus.setValveStatus1(true);
-        juekeStatus.setValveStatus2(true);
-        juekeStatus.setValveStatus3(true);
-        juekeStatus.setValveStatus4(true);
-        juekeStatus.setValveStatus5(false);
+        juekeStatus.setErrorFlags((byte) 10);
+        juekeStatus.setErrorCode(10);
+        juekeStatus.setValveStatus1(false);
+        juekeStatus.setValveStatus2(false);
+        juekeStatus.setValveStatus3(false);
+        juekeStatus.setValveStatus4(false);
+        juekeStatus.setValveStatus5(true);
         juekeStatus.setValveStatus6(false);
-        juekeStatus.setValveStatus7(false);
+        juekeStatus.setValveStatus7(true);
         juekeStatus.setValveStatus8(false);
-        juekeStatus.setPowerHeater((byte)1);
-        juekeStatus.setActualTempHeater(20.1);
-        juekeStatus.setSetpointHeater(23);
-        juekeStatus.setActualPressureCell(2);
-        juekeStatus.setSetpointPressure(4.2);
-        juekeStatus.setPumpPower(2.4);
-        juekeStatus.setTempPT100_1(1);
-        juekeStatus.setTempPT100_2(2);
-        juekeStatus.setCounter((byte)3);
-        juekeStatus.setEnd((byte) 99);
-        juekeStatus.setCrc(0);
+        juekeStatus.setPowerHeater((byte) 10);
+        juekeStatus.setActualTempHeater(25.7);
+        juekeStatus.setSetpointHeater(25.7);
+        juekeStatus.setActualPressureCell(2570);
+        juekeStatus.setSetpointPressure(2570);
+        juekeStatus.setPumpPower(10);
+        juekeStatus.setTempPT100_1(25.7);
+        juekeStatus.setTempPT100_2(25.7);
+        juekeStatus.setCounter((byte) 10);
+        juekeStatus.setEnd((byte) 10);
+        juekeStatus.setCrc(2570);
+        juekeStatus.setRawJuekeMessage(new byte[]{1, 26, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10});
         return juekeStatus;
     }
 }

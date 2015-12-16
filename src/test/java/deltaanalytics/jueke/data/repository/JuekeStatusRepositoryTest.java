@@ -10,12 +10,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class JuekeStatusRepositoryTest {
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         CleanTestMemDB.cleanUp();
     }
 
     @Test
-    public void create(){
+    public void create() {
         JuekeStatus juekeStatus = new JuekeStatus();
         juekeStatus.setErrorCode(1);
 
@@ -27,7 +27,7 @@ public class JuekeStatusRepositoryTest {
     }
 
     @Test
-    public void update(){
+    public void update() {
         JuekeStatus juekeStatus = new JuekeStatus();
 
         JuekeStatusRepository juekeStatusRepository = new JuekeStatusRepository();

@@ -1,4 +1,4 @@
-package deltaanalytics.jueke.hardware;
+package deltaanalytics.jueke.hardware.domain;
 
 public enum ValveState {
     ACTIVE("1"), INACTIVE("0");

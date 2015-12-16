@@ -1,4 +1,4 @@
-package deltaanalytics.jueke.hardware.factory;
+package deltaanalytics.jueke.hardware.domain;
 
 import deltaanalytics.jueke.data.entity.JuekeStatus;
 
@@ -25,6 +25,7 @@ public class JuekeStatusFactory {
         juekeStatus.setCounter(b1[22]);
         juekeStatus.setEnd(b1[23]);
         juekeStatus.setCrc(bytes2Int(new byte[]{b1[25], b1[24]}));
+        juekeStatus.setRawJuekeMessage(b1);
         return juekeStatus;
     }
 

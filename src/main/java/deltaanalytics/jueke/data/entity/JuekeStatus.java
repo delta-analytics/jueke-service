@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Entity
-public class JuekeStatus implements JuekeEntity{
+public class JuekeStatus implements JuekeEntity {
     private long id;
     private LocalDateTime statusDateTime;
     private byte start;
@@ -293,9 +293,10 @@ public class JuekeStatus implements JuekeEntity{
     }
 
     @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         setStatusDateTime(LocalDateTime.now());
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -332,7 +333,9 @@ public class JuekeStatus implements JuekeEntity{
         if (counter != that.counter) return false;
         if (end != that.end) return false;
         if (crc != that.crc) return false;
-        if (!statusDateTime.equals(that.statusDateTime)) return false;
+        if (statusDateTime != null) {
+            if (!statusDateTime.equals(that.statusDateTime)) return false;
+        }
         return Arrays.equals(rawJuekeMessage, that.rawJuekeMessage);
 
     }
@@ -380,5 +383,42 @@ public class JuekeStatus implements JuekeEntity{
         result = 31 * result + crc;
         result = 31 * result + Arrays.hashCode(rawJuekeMessage);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "JuekeStatus{" +
+                "id=" + id +
+                ", statusDateTime=" + statusDateTime +
+                ", start=" + start +
+                ", numberOfBytes=" + numberOfBytes +
+                ", controllerStatus=" + controllerStatus +
+                ", statusOfPump=" + statusOfPump +
+                ", pressureRegulationActive=" + pressureRegulationActive +
+                ", temperatureOfHeaterOk=" + temperatureOfHeaterOk +
+                ", heaterRegulationActive=" + heaterRegulationActive +
+                ", errorFlags=" + errorFlags +
+                ", errorCode=" + errorCode +
+                ", valveStatus1=" + valveStatus1 +
+                ", valveStatus2=" + valveStatus2 +
+                ", valveStatus3=" + valveStatus3 +
+                ", valveStatus4=" + valveStatus4 +
+                ", valveStatus5=" + valveStatus5 +
+                ", valveStatus6=" + valveStatus6 +
+                ", valveStatus7=" + valveStatus7 +
+                ", valveStatus8=" + valveStatus8 +
+                ", powerHeater=" + powerHeater +
+                ", actualTempHeater=" + actualTempHeater +
+                ", setpointHeater=" + setpointHeater +
+                ", actualPressureCell=" + actualPressureCell +
+                ", setpointPressure=" + setpointPressure +
+                ", pumpPower=" + pumpPower +
+                ", tempPT100_1=" + tempPT100_1 +
+                ", tempPT100_2=" + tempPT100_2 +
+                ", counter=" + counter +
+                ", end=" + end +
+                ", crc=" + crc +
+                ", rawJuekeMessage=" + Arrays.toString(rawJuekeMessage) +
+                '}';
     }
 }
