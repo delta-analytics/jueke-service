@@ -28,8 +28,9 @@ public class CommandRunner {
                           ValveState valveState5, ValveState valveState6, ValveState valveState7, ValveState valveState8) throws Exception {
         String stateString = valveStatesToString(valveState1, valveState2, valveState3, valveState4,
                 valveState5, valveState6, valveState7, valveState8);
-        LOGGER.info("setValves");
-        outputStream.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_VALVES, Byte.parseByte(stateString, 2), (byte) 0, (byte) 0, (byte) 0).toByteArray());
+        LOGGER.info("setValves for String " + stateString);
+        byte parseByte = (byte) Integer.parseInt(stateString, 2);
+        outputStream.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_VALVES, parseByte, (byte) 0, (byte) 0, (byte) 0).toByteArray());
     }
 
     public void disablePump() throws Exception {
