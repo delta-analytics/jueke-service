@@ -9,6 +9,10 @@ public enum JuekeWhiteCellCommandNumber {
         this.command = command;
     }
 
+    public int getCommand() {
+        return command;
+    }
+
     public byte toByte() {
         return (byte) command;
     }

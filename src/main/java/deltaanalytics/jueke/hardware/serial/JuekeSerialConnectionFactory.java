@@ -19,11 +19,11 @@ public class JuekeSerialConnectionFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(JuekeSerialConnectionFactory.class);
     private final int baud = 57600;
 
-
-    public JuekeSerialConnection connect() throws Exception {
+    //Example serialPortName "/dev/tty.usbserial-J0000031" for MacOsx
+    public JuekeSerialConnection connect(String serialPortName) throws Exception {
         InputStream in = null;
         OutputStream out = null;
-        CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier("/dev/tty.usbserial-J0000031");
+        CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(serialPortName);
         SerialPort serialPort = null;
         if (portIdentifier.isCurrentlyOwned()) {
             LOGGER.info("Error: Port is currently in use");
