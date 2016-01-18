@@ -77,4 +77,8 @@ public abstract class JuekeDataRepository<S extends JuekeEntity> {
         }
         endDBOperation();
     }
+
+    EntityManager getEntityManager() {
+        return entityManager;
+    }
 }

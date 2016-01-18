@@ -4,6 +4,8 @@ import deltaanalytics.jueke.data.entity.JuekeStatus;
 import org.junit.After;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -41,4 +43,15 @@ public class JuekeStatusRepositoryTest {
         assertThat(juekeStatusRepository.read(juekeStatus.getId()).getStatusDateTime(), is(not(nullValue())));
     }
 
+    @Test
+    public void findAllBetweenDates() {
+        JuekeStatusRepository juekeStatusRepository = new JuekeStatusRepository();
+        JuekeStatus juekeStatus = new JuekeStatus();
+        LocalDateTime localDateTimeNow = LocalDateTime.now();
+        LocalDateTime localDateTimeOneMonthAgo = localDateTimeNow.minusMonths(1);
+        juekeStatus.setStatusDateTime(localDateTimeNow);
+        juekeStatusRepository.createOrUpdate(juekeStatus);
+
+        assertThat(juekeStatusRepository.findAllBetweenDates(localDateTimeOneMonthAgo, localDateTimeNow.plusDays(2)).size(), is(equalTo(1)));
+    }
 }

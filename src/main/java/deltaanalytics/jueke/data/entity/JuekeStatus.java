@@ -333,9 +333,7 @@ public class JuekeStatus implements JuekeEntity {
         if (counter != that.counter) return false;
         if (end != that.end) return false;
         if (crc != that.crc) return false;
-        if (statusDateTime != null) {
-            if (!statusDateTime.equals(that.statusDateTime)) return false;
-        }
+
         return Arrays.equals(rawJuekeMessage, that.rawJuekeMessage);
 
     }
@@ -345,7 +343,6 @@ public class JuekeStatus implements JuekeEntity {
         int result;
         long temp;
         result = (int) (id ^ (id >>> 32));
-        result = 31 * result + statusDateTime.hashCode();
         result = 31 * result + (int) start;
         result = 31 * result + (int) numberOfBytes;
         result = 31 * result + (int) controllerStatus;

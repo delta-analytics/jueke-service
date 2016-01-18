@@ -2,6 +2,8 @@ package deltaanalytics.jueke.hardware.domain;
 
 import deltaanalytics.jueke.data.entity.JuekeStatus;
 
+import java.time.LocalDateTime;
+
 public class JuekeStatusFactory {
     public JuekeStatus build(byte[] b1) {
         JuekeStatus juekeStatus = new JuekeStatus();
@@ -26,6 +28,7 @@ public class JuekeStatusFactory {
         juekeStatus.setEnd(b1[23]);
         juekeStatus.setCrc(bytes2Int(new byte[]{b1[25], b1[24]}));
         juekeStatus.setRawJuekeMessage(b1);
+        juekeStatus.setStatusDateTime(LocalDateTime.now());
         return juekeStatus;
     }
 
