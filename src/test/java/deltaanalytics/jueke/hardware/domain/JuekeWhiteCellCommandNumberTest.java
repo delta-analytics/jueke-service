@@ -15,5 +15,9 @@ public class JuekeWhiteCellCommandNumberTest {
         assertThat(JuekeWhiteCellCommandNumber.SET_PUMP_POWER.toByte(), is(equalTo((byte) 5)));
         assertThat(JuekeWhiteCellCommandNumber.SET_TEMP_HEATER.toByte(), is(equalTo((byte) 10)));
         assertThat(JuekeWhiteCellCommandNumber.SET_PRESSURE_SETPOINT.toByte(), is(equalTo((byte) 11)));
+        assertThat(JuekeWhiteCellCommandNumber.START_PRESS_REGULATION.toByte(), is(equalTo((byte) 12)));
+        assertThat(JuekeWhiteCellCommandNumber.STOP_PRESS_REGULATION.toByte(), is(equalTo((byte) 13)));
+        assertThat(JuekeWhiteCellCommandNumber.START_HEAT_REGULATION.toByte(), is(equalTo((byte) 14)));
+        assertThat(JuekeWhiteCellCommandNumber.STOP_HEAT_REGULATION.toByte(), is(equalTo((byte) 15)));
     }
 }

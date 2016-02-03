@@ -45,7 +45,7 @@ public class CommandRunner {
 
     public void setPressure(short pressure) throws Exception {
         LOGGER.info("setPressure");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_TEMP_HEATER, (byte) (pressure & 0xff), (byte) ((pressure >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PRESSURE_SETPOINT, (byte) (pressure & 0xff), (byte) ((pressure >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
     }
 
     public JuekeStatus getStatus() throws Exception {
@@ -53,6 +53,24 @@ public class CommandRunner {
         juekeStatusRepository.createOrUpdate(juekeStatus);
         return juekeStatus;
     }
+    
+    public void startPressureRegulation() throws Exception {
+        LOGGER.info("startPressureRegulation");
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_PRESS_REGULATION), 0, false);   
+}
+    public void stopPressureRegulation() throws Exception {
+        LOGGER.info("stopPressureRegulation");
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_PRESS_REGULATION), 0, false);   
+}
+
+    public void startTemperatureRegulation() throws Exception {
+        LOGGER.info("startTemperatureRegulation");
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_HEAT_REGULATION), 0, false);   
+}
+    public void stopTemperatureRegulation() throws Exception {
+        LOGGER.info("stopTemperatureRegulation");
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_HEAT_REGULATION), 0, false);   
+}    
 
     private String valveStatesToString(ValveState valveState1, ValveState valveState2, ValveState valveState3, ValveState valveState4,
                                        ValveState valveState5, ValveState valveState6, ValveState valveState7, ValveState valveState8) {
