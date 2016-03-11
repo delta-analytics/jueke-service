@@ -9,14 +9,17 @@ import deltaanalytics.jueke.hardware.domain.ValveState;
 import deltaanalytics.jueke.hardware.serial.JuekeSerialConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+
+@Service
 public class CommandRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRunner.class);
     private JuekeStatusRepository juekeStatusRepository;
-
-    public CommandRunner() throws Exception {
-        juekeStatusRepository = new JuekeStatusRepository();
-    }
 
     public void setValves(ValveState valveState1, ValveState valveState2, ValveState valveState3, ValveState valveState4,
                           ValveState valveState5, ValveState valveState6, ValveState valveState7, ValveState valveState8) throws Exception {
@@ -50,7 +53,7 @@ public class CommandRunner {
 
     public JuekeStatus getStatus() throws Exception {
         JuekeStatus juekeStatus = new JuekeStatusFactory().build(JuekeSerialConnectionFactory.execute(null, 26, true));
-        juekeStatusRepository.createOrUpdate(juekeStatus);
+        juekeStatusRepository.save(juekeStatus);
         return juekeStatus;
     }
 
@@ -58,6 +61,20 @@ public class CommandRunner {
                                        ValveState valveState5, ValveState valveState6, ValveState valveState7, ValveState valveState8) {
 
         return valveState1.getState() + valveState2.getState() + valveState3.getState() + valveState4.getState() + valveState5.getState() + valveState6.getState() + valveState7.getState() + valveState8.getState();
+    }
 
+    @Autowired
+    public void setJuekeStatusRepository(JuekeStatusRepository juekeStatusRepository) {
+        this.juekeStatusRepository = juekeStatusRepository;
+    }
+
+    @PostConstruct
+    private void establishSerialConnection() {
+        JuekeSerialConnectionFactory.establishConnection("port");
+    }
+
+    @PreDestroy
+    private void closeSerialConnection() {
+        JuekeSerialConnectionFactory.closeConnection();
     }
 }

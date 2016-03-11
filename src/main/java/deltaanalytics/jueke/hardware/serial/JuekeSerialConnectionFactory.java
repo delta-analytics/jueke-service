@@ -17,26 +17,42 @@ public class JuekeSerialConnectionFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(JuekeSerialConnectionFactory.class);
     private static InputStream in;
     private static OutputStream out;
+    private static SerialPort serialPort;
 
     //Example serialPortName "/dev/tty.usbserial-J0000031" for MacOsx
-    public synchronized static void establishConnection(String serialPortName) throws Exception {
-        CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(serialPortName);
-        SerialPort serialPort;
-        if (portIdentifier.isCurrentlyOwned()) {
-            LOGGER.info("Error: Port is currently in use");
-        } else {
-            CommPort commPort = portIdentifier.open(JuekeSerialConnectionFactory.class.getName(), 2000);
-
-            if (commPort instanceof SerialPort) {
-                serialPort = (SerialPort) commPort;
-                serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);  // Default Jüke
-                in = serialPort.getInputStream();
-                out = serialPort.getOutputStream();
-                LOGGER.info("input and output stream opened");
+    public synchronized static void establishConnection(String serialPortName) {
+        try {
+            CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(serialPortName);
+            if (portIdentifier.isCurrentlyOwned()) {
+                LOGGER.info("Error: Port is currently in use");
             } else {
-                LOGGER.error("Error: Only serial ports are handled by this example.");
+                CommPort commPort = portIdentifier.open(JuekeSerialConnectionFactory.class.getName(), 2000);
+
+                if (commPort instanceof SerialPort) {
+                    serialPort = (SerialPort) commPort;
+                    serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);  // Default Jüke
+                    in = serialPort.getInputStream();
+                    out = serialPort.getOutputStream();
+                    LOGGER.info("input and output stream opened");
+                } else {
+                    LOGGER.error("Error: Only serial ports are handled by this example.");
+                }
             }
+        }catch (Exception e){
+            LOGGER.error("",e);
         }
+    }
+
+    public synchronized static void closeConnection(){
+        try {
+            serialPort.removeEventListener();
+            in.close();
+            out.close();
+            serialPort.close();
+        } catch (Exception e){
+            LOGGER.error("",e);
+        }
+
     }
 
     public synchronized static byte[] execute(JuekeWhiteCellMessage juekeWhiteCellMessage, int expectedResultLength, boolean onlyStatusRequest) throws Exception {

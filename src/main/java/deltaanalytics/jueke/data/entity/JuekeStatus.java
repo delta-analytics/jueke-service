@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Entity
-public class JuekeStatus implements JuekeEntity {
+public class JuekeStatus {
     private long id;
     private LocalDateTime statusDateTime;
     private byte start;
