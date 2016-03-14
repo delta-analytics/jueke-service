@@ -38,21 +38,22 @@ public class JuekeSerialConnectionFactory {
                     LOGGER.error("Error: Only serial ports are handled by this example.");
                 }
             }
-        }catch (Exception e){
-            LOGGER.error("",e);
+        } catch (Exception e) {
+            LOGGER.error("", e);
         }
     }
 
-    public synchronized static void closeConnection(){
-        try {
-            serialPort.removeEventListener();
-            in.close();
-            out.close();
-            serialPort.close();
-        } catch (Exception e){
-            LOGGER.error("",e);
+    public synchronized static void closeConnection() {
+        if (serialPort != null) {
+            try {
+                serialPort.removeEventListener();
+                in.close();
+                out.close();
+                serialPort.close();
+            } catch (Exception e) {
+                LOGGER.error("", e);
+            }
         }
-
     }
 
     public synchronized static byte[] execute(JuekeWhiteCellMessage juekeWhiteCellMessage, int expectedResultLength, boolean onlyStatusRequest) throws Exception {

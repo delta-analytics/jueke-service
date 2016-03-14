@@ -1,32 +1,28 @@
 package deltaanalytics.jueke.hardware;
 
+import deltaanalytics.jueke.data.ValveStateDto;
 import deltaanalytics.jueke.data.entity.JuekeStatus;
 import deltaanalytics.jueke.data.repository.JuekeStatusRepository;
 import deltaanalytics.jueke.hardware.domain.JuekeStatusFactory;
 import deltaanalytics.jueke.hardware.domain.JuekeWhiteCellCommandNumber;
 import deltaanalytics.jueke.hardware.domain.JuekeWhiteCellMessage;
-import deltaanalytics.jueke.hardware.domain.ValveState;
 import deltaanalytics.jueke.hardware.serial.JuekeSerialConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 
 @Service
 public class CommandRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRunner.class);
     private JuekeStatusRepository juekeStatusRepository;
+    private String portName;
 
-    public void setValves(ValveState valveState1, ValveState valveState2, ValveState valveState3, ValveState valveState4,
-                          ValveState valveState5, ValveState valveState6, ValveState valveState7, ValveState valveState8) throws Exception {
-        String stateString = valveStatesToString(valveState1, valveState2, valveState3, valveState4,
-                valveState5, valveState6, valveState7, valveState8);
-        LOGGER.info("setValves for String " + stateString);
-        byte parseByte = (byte) Integer.parseInt(stateString, 2);
+    public void setValves(ValveStateDto valveStateDto) throws Exception {
+
+        LOGGER.info("setValves for String " + valveStateDto.valveStatesToString());
+        byte parseByte = (byte) Integer.parseInt(valveStateDto.valveStatesToString(), 2);
         JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_VALVES, parseByte, (byte) 0, (byte) 0, (byte) 0), 0, false);
     }
 
@@ -56,43 +52,32 @@ public class CommandRunner {
         juekeStatusRepository.save(juekeStatus);
         return juekeStatus;
     }
-    
+
     public void startPressureRegulation() throws Exception {
         LOGGER.info("startPressureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_PRESS_REGULATION), 0, false);   
-}
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_PRESS_REGULATION), 0, false);
+    }
+
     public void stopPressureRegulation() throws Exception {
         LOGGER.info("stopPressureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_PRESS_REGULATION), 0, false);   
-}
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_PRESS_REGULATION), 0, false);
+    }
 
     public void startTemperatureRegulation() throws Exception {
         LOGGER.info("startTemperatureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_HEAT_REGULATION), 0, false);   
-}
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_HEAT_REGULATION), 0, false);
+    }
+
     public void stopTemperatureRegulation() throws Exception {
         LOGGER.info("stopTemperatureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_HEAT_REGULATION), 0, false);   
-}    
-
-    private String valveStatesToString(ValveState valveState1, ValveState valveState2, ValveState valveState3, ValveState valveState4,
-                                       ValveState valveState5, ValveState valveState6, ValveState valveState7, ValveState valveState8) {
-
-        return valveState1.getState() + valveState2.getState() + valveState3.getState() + valveState4.getState() + valveState5.getState() + valveState6.getState() + valveState7.getState() + valveState8.getState();
+        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_HEAT_REGULATION), 0, false);
     }
+
 
     @Autowired
     public void setJuekeStatusRepository(JuekeStatusRepository juekeStatusRepository) {
         this.juekeStatusRepository = juekeStatusRepository;
     }
 
-    @PostConstruct
-    private void establishSerialConnection() {
-        JuekeSerialConnectionFactory.establishConnection("port");
-    }
 
-    @PreDestroy
-    private void closeSerialConnection() {
-        JuekeSerialConnectionFactory.closeConnection();
-    }
 }
