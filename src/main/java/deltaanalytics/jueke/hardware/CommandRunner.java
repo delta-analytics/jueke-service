@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 public class CommandRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRunner.class);
     private JuekeStatusRepository juekeStatusRepository;
-    private String portName;
 
     public void setValves(ValveStateDto valveStateDto) throws Exception {
 
