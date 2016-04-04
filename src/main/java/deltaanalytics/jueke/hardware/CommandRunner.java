@@ -35,13 +35,13 @@ public class CommandRunner {
         JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PUMP_POWER, (byte) speed, (byte) 0, (byte) 0, (byte) 0), 0, false);
     }
 
-    public void setTemperature(short temperature) throws Exception {
+    public void setTemperature(int temperature) throws Exception {
         short xt = (short) (temperature * 100);
         LOGGER.info("setTemperature");
         JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_TEMP_HEATER, (byte) (xt & 0xff), (byte) ((xt >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
     }
 
-    public void setPressure(short pressure) throws Exception {
+    public void setPressure(int pressure) throws Exception {
         LOGGER.info("setPressure");
         JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PRESSURE_SETPOINT, (byte) (pressure & 0xff), (byte) ((pressure >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
     }

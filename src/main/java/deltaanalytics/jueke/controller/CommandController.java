@@ -33,7 +33,7 @@ public class CommandController {
     }
 
     @RequestMapping(value = "/temperature/{temperature}", method = RequestMethod.POST)
-    public void setTemperature(@PathVariable short temperature) {
+    public void setTemperature(@PathVariable int temperature) {
         LOGGER.info("setTemperature " + temperature);
         try {
             commandRunner.setTemperature(temperature);
@@ -83,7 +83,7 @@ public class CommandController {
     }
 
     @RequestMapping(value = "/pressure/{pressure}", method = RequestMethod.POST)
-    public void setPressure(@PathVariable short pressure) {
+    public void setPressure(@PathVariable int pressure) {
         LOGGER.info("setPressure " + pressure);
         try {
             commandRunner.setPressure(pressure);

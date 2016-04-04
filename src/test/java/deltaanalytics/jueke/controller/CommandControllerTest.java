@@ -35,7 +35,7 @@ public class CommandControllerTest {
 
     @Test
     public void setTemperature() throws Exception {
-        short temperature = (short) 10;
+        int temperature = 10;
         commandController.setTemperature(temperature);
         verify(commandRunner).setTemperature(temperature);
     }
@@ -66,7 +66,7 @@ public class CommandControllerTest {
 
     @Test
     public void setPressure() throws Exception {
-        short pressure = (short) 10;
+        int pressure = 10;
         commandController.setPressure(pressure);
         verify(commandRunner).setPressure(pressure);
     }
