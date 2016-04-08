@@ -72,7 +72,6 @@ public class CommandRunner {
         JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_HEAT_REGULATION), 0, false);
     }
 
-
     @Autowired
     public void setJuekeStatusRepository(JuekeStatusRepository juekeStatusRepository) {
         this.juekeStatusRepository = juekeStatusRepository;
