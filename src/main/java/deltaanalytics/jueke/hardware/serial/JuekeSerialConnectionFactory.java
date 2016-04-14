@@ -9,10 +9,14 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+@Component
 public class JuekeSerialConnectionFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(JuekeSerialConnectionFactory.class);
     private static InputStream in;
@@ -20,7 +24,7 @@ public class JuekeSerialConnectionFactory {
     private static SerialPort serialPort;
 
     //Example serialPortName "/dev/tty.usbserial-J0000031" for MacOsx
-    public synchronized static void establishConnection(String serialPortName) {
+    public synchronized void establishConnection(String serialPortName) {
         try {
             CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(serialPortName);
             if (portIdentifier.isCurrentlyOwned()) {
@@ -43,7 +47,7 @@ public class JuekeSerialConnectionFactory {
         }
     }
 
-    public synchronized static void closeConnection() {
+    public synchronized void closeConnection() {
         if (serialPort != null) {
             try {
                 serialPort.removeEventListener();
@@ -56,7 +60,7 @@ public class JuekeSerialConnectionFactory {
         }
     }
 
-    public synchronized static byte[] execute(JuekeWhiteCellMessage juekeWhiteCellMessage, int expectedResultLength, boolean onlyStatusRequest) throws Exception {
+    public synchronized byte[] execute(JuekeWhiteCellMessage juekeWhiteCellMessage, int expectedResultLength, boolean onlyStatusRequest) throws Exception {
         if (in == null || out == null) {
             throw new RuntimeException("You have to establishConnection before the first execution!");
         }

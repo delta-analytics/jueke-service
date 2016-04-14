@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class CommandRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRunner.class);
     private JuekeStatusRepository juekeStatusRepository;
+    private JuekeSerialConnectionFactory juekeSerialConnectionFactory;
+    private JuekeStatusFactory juekeStatusFactory;
 
     public void setValve(int valve, String state) throws Exception {
         LOGGER.info("setValve " + valve + " with state " + state);
@@ -35,7 +37,7 @@ public class CommandRunner {
         }
         JuekeStatus juekeStatus = getStatus();
         ValveStateDto valveStateDto = new ValveStateDto();
-       
+
         if (valve == 1) {
             valveStateDto.setValveState1(valveStateAsNumber);
         } else {
@@ -79,7 +81,7 @@ public class CommandRunner {
 
         byte parseByte = (byte) Integer.parseInt(valveStateDto.valveStatesToString(), 2);
         LOGGER.info("parseByte " + parseByte);
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_VALVES, parseByte, (byte) 0, (byte) 0, (byte) 0), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_VALVES, parseByte, (byte) 0, (byte) 0, (byte) 0), 0, false);
 
         LOGGER.info("setValve end");
     }
@@ -102,49 +104,49 @@ public class CommandRunner {
 
     public void disablePump() throws Exception {
         LOGGER.info("disablePump");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PUMP_POWER), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PUMP_POWER), 0, false);
     }
 
     public void setPumpSpeed(int speed) throws Exception {
         LOGGER.info("setPumpSpeed");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PUMP_POWER, (byte) speed, (byte) 0, (byte) 0, (byte) 0), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PUMP_POWER, (byte) speed, (byte) 0, (byte) 0, (byte) 0), 0, false);
     }
 
     public void setTemperature(int temperature) throws Exception {
         short xt = (short) (temperature * 100);
         LOGGER.info("setTemperature");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_TEMP_HEATER, (byte) (xt & 0xff), (byte) ((xt >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_TEMP_HEATER, (byte) (xt & 0xff), (byte) ((xt >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
     }
 
     public void setPressure(int pressure) throws Exception {
         LOGGER.info("setPressure");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PRESSURE_SETPOINT, (byte) (pressure & 0xff), (byte) ((pressure >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PRESSURE_SETPOINT, (byte) (pressure & 0xff), (byte) ((pressure >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
     }
 
     public JuekeStatus getStatus() throws Exception {
-        JuekeStatus juekeStatus = new JuekeStatusFactory().build(JuekeSerialConnectionFactory.execute(null, 26, true));
+        JuekeStatus juekeStatus = juekeStatusFactory.build(juekeSerialConnectionFactory.execute(null, 26, true));
         juekeStatusRepository.save(juekeStatus);
         return juekeStatus;
     }
 
     public void startPressureRegulation() throws Exception {
         LOGGER.info("startPressureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_PRESS_REGULATION), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_PRESS_REGULATION), 0, false);
     }
 
     public void stopPressureRegulation() throws Exception {
         LOGGER.info("stopPressureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_PRESS_REGULATION), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_PRESS_REGULATION), 0, false);
     }
 
     public void startTemperatureRegulation() throws Exception {
         LOGGER.info("startTemperatureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_HEAT_REGULATION), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_HEAT_REGULATION), 0, false);
     }
 
     public void stopTemperatureRegulation() throws Exception {
         LOGGER.info("stopTemperatureRegulation");
-        JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_HEAT_REGULATION), 0, false);
+        juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_HEAT_REGULATION), 0, false);
     }
 
     @Autowired
@@ -152,5 +154,13 @@ public class CommandRunner {
         this.juekeStatusRepository = juekeStatusRepository;
     }
 
+    @Autowired
+    public void setJuekeSerialConnectionFactory(JuekeSerialConnectionFactory juekeSerialConnectionFactory) {
+        this.juekeSerialConnectionFactory = juekeSerialConnectionFactory;
+    }
 
+    @Autowired
+    public void setJuekeStatusFactory(JuekeStatusFactory juekeStatusFactory) {
+        this.juekeStatusFactory = juekeStatusFactory;
+    }
 }

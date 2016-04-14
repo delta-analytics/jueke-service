@@ -1,9 +1,11 @@
 package deltaanalytics.jueke.hardware.domain;
 
 import deltaanalytics.jueke.data.entity.JuekeStatus;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class JuekeStatusFactory {
     public JuekeStatus build(byte[] b1) {
         JuekeStatus juekeStatus = new JuekeStatus();

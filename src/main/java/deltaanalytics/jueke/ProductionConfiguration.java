@@ -15,10 +15,11 @@ import javax.annotation.PreDestroy;
 public class ProductionConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductionConfiguration.class);
     private String portName;
+    private JuekeSerialConnectionFactory juekeSerialConnectionFactory;
 
     @PostConstruct
     private void establishSerialConnection() {
-        JuekeSerialConnectionFactory.establishConnection(portName);
+        juekeSerialConnectionFactory.establishConnection(portName);
     }
 
     @Value("${port.name}")
@@ -29,6 +30,6 @@ public class ProductionConfiguration {
 
     @PreDestroy
     private void closeSerialConnection() {
-        JuekeSerialConnectionFactory.closeConnection();
+        juekeSerialConnectionFactory.closeConnection();
     }
 }
