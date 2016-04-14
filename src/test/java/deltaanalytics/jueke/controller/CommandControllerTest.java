@@ -1,11 +1,9 @@
 package deltaanalytics.jueke.controller;
 
-import deltaanalytics.jueke.data.ValveStateDto;
 import deltaanalytics.jueke.hardware.CommandRunner;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -14,14 +12,14 @@ public class CommandControllerTest {
     private CommandController commandController;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         commandController = new CommandController();
         commandRunner = mock(CommandRunner.class);
         commandController.setCommandRunner(commandRunner);
     }
 
     @Test
-    public void disablePump() throws Exception{
+    public void disablePump() throws Exception {
         commandController.disablePump();
         verify(commandRunner).disablePump();
     }
@@ -72,17 +70,8 @@ public class CommandControllerTest {
     }
 
     @Test
-    public void setValves() throws Exception {
-        ValveStateDto valveStateDto = new ValveStateDto();
-        valveStateDto.setValveState1(0);
-        valveStateDto.setValveState2(1);
-        valveStateDto.setValveState3(1);
-        valveStateDto.setValveState4(0);
-        valveStateDto.setValveState5(0);
-        valveStateDto.setValveState6(0);
-        valveStateDto.setValveState7(1);
-        valveStateDto.setValveState8(1);
-        commandController.setValves(valveStateDto);
-        verify(commandRunner).setValves(valveStateDto);
+    public void setValve() throws Exception {
+        commandController.setValve(1, "Enable");
+        verify(commandRunner).setValve(1, "Enable");
     }
 }

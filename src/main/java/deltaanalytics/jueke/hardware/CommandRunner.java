@@ -18,11 +18,86 @@ public class CommandRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRunner.class);
     private JuekeStatusRepository juekeStatusRepository;
 
-    public void setValves(ValveStateDto valveStateDto) throws Exception {
+    public void setValve(int valve, String state) throws Exception {
+        LOGGER.info("setValve " + valve + " with state " + state);
+        int valveStateAsNumber = 0;
+        if (!isCorrectValve(valve)) {
+            throw new RuntimeException("Valve " + valve + " must be one of [1,2,3,4,5,6,7,8]");
+        }
+        if (!isCorrectValveState(state)) {
+            throw new RuntimeException("Valve State only can be Enable or Disable, " + state + " is not correct.");
+        }
+        if (state.equalsIgnoreCase("enable")) {
+            valveStateAsNumber = 1;
+        }
+        if (state.equalsIgnoreCase("disable")) {
+            valveStateAsNumber = 0;
+        }
+        JuekeStatus juekeStatus = getStatus();
+        ValveStateDto valveStateDto = new ValveStateDto();
+       
+        if (valve == 1) {
+            valveStateDto.setValveState1(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState1(valveStateAsInt(juekeStatus.isValveStatus1()));
+        }
+        if (valve == 2) {
+            valveStateDto.setValveState2(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState2(valveStateAsInt(juekeStatus.isValveStatus2()));
+        }
+        if (valve == 3) {
+            valveStateDto.setValveState3(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState3(valveStateAsInt(juekeStatus.isValveStatus3()));
+        }
+        if (valve == 4) {
+            valveStateDto.setValveState4(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState4(valveStateAsInt(juekeStatus.isValveStatus4()));
+        }
+        if (valve == 5) {
+            valveStateDto.setValveState5(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState5(valveStateAsInt(juekeStatus.isValveStatus5()));
+        }
+        if (valve == 6) {
+            valveStateDto.setValveState6(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState6(valveStateAsInt(juekeStatus.isValveStatus6()));
+        }
+        if (valve == 7) {
+            valveStateDto.setValveState7(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState7(valveStateAsInt(juekeStatus.isValveStatus7()));
+        }
+        if (valve == 8) {
+            valveStateDto.setValveState8(valveStateAsNumber);
+        } else {
+            valveStateDto.setValveState8(valveStateAsInt(juekeStatus.isValveStatus8()));
+        }
 
-        LOGGER.info("setValves for String " + valveStateDto.valveStatesToString());
         byte parseByte = (byte) Integer.parseInt(valveStateDto.valveStatesToString(), 2);
+        LOGGER.info("parseByte " + parseByte);
         JuekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_VALVES, parseByte, (byte) 0, (byte) 0, (byte) 0), 0, false);
+
+        LOGGER.info("setValve end");
+    }
+
+    private int valveStateAsInt(boolean state) {
+        if (state) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private boolean isCorrectValve(int valve) {
+        return valve >= 1 && valve <= 8;
+    }
+
+    private boolean isCorrectValveState(String state) {
+        return state.equalsIgnoreCase("Enable") || state.equalsIgnoreCase("Disable");
     }
 
     public void disablePump() throws Exception {

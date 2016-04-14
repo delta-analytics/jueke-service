@@ -1,6 +1,5 @@
 package deltaanalytics.jueke.controller;
 
-import deltaanalytics.jueke.data.ValveStateDto;
 import deltaanalytics.jueke.hardware.CommandRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,11 +91,11 @@ public class CommandController {
         }
     }
 
-    @RequestMapping(value = "/valves/{valveDto}", method = RequestMethod.POST)
-    public void setValves(@RequestParam ValveStateDto valveStateDto) {
-        LOGGER.info("setValves " + valveStateDto);
+    @RequestMapping(value = "/valves/{valve}", method = RequestMethod.POST)
+    public void setValve(@PathVariable int valve, @RequestParam("state") String state) {
+        LOGGER.info("setValve " + valve);
         try {
-            commandRunner.setValves(valveStateDto);
+            commandRunner.setValve(valve, state);
         } catch (Exception e) {
             LOGGER.error("", e);
         }
