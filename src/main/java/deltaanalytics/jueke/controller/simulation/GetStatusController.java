@@ -16,6 +16,7 @@ public class GetStatusController {
     @RequestMapping("/status")
     public SimulatedJuekeStatus getStatus() {
         LOGGER.info("getStatus");
+        LOGGER.info(simulatedJuekeStatus.toString());
         return simulatedJuekeStatus;
     }
 
