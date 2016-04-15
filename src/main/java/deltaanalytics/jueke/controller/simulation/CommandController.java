@@ -1,110 +1,105 @@
-package deltaanalytics.jueke.controller;
+package deltaanalytics.jueke.controller.simulation;
 
-import deltaanalytics.jueke.hardware.CommandRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
 
-@Profile("production")
+@Profile("simulation")
 @RestController
 public class CommandController {
     private Logger LOGGER = LoggerFactory.getLogger(CommandController.class);
-    private CommandRunner commandRunner;
+    private SimulatedJuekeStatus simulatedJuekeStatus;
 
     @RequestMapping(value = "/pump/disable", method = RequestMethod.POST)
     public void disablePump() {
         LOGGER.info("disablePump");
-        try {
-            commandRunner.disablePump();
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setStatusOfPump(false);
     }
 
     @RequestMapping(value = "/pump/speed/{speed}", method = RequestMethod.POST)
     public void setPumpSpeed(@PathVariable int speed) {
         LOGGER.info("setPumpSpeed " + speed);
-        try {
-            commandRunner.setPumpSpeed(speed);
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setStatusOfPump(true);
+        simulatedJuekeStatus.setPumpPower(speed);
     }
 
     @RequestMapping(value = "/temperature/{temperature}", method = RequestMethod.POST)
     public void setTemperature(@PathVariable int temperature) {
         LOGGER.info("setTemperature " + temperature);
-        try {
-            commandRunner.setTemperature(temperature);
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setActualTempHeater(temperature);
     }
 
     @RequestMapping(value = "/pressure/regulation/start", method = RequestMethod.POST)
     public void startPressureRegulation() {
         LOGGER.info("startPressureRegulation ");
-        try {
-            commandRunner.startPressureRegulation();
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setPressureRegulationActive(true);
     }
 
     @RequestMapping(value = "/pressure/regulation/stop", method = RequestMethod.POST)
     public void stopPressureRegulation() {
         LOGGER.info("stopPressureRegulation ");
-        try {
-            commandRunner.stopPressureRegulation();
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setPressureRegulationActive(false);
     }
 
     @RequestMapping(value = "/temperature/regulation/start", method = RequestMethod.POST)
     public void startTemperatureRegulation() {
         LOGGER.info("startTemperatureRegulation ");
-        try {
-            commandRunner.startTemperatureRegulation();
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setHeaterRegulationActive(true);
     }
 
     @RequestMapping(value = "/temperature/regulation/stop", method = RequestMethod.POST)
     public void stopTemperatureRegulation() {
         LOGGER.info("stopTemperatureRegulation ");
-        try {
-            commandRunner.stopTemperatureRegulation();
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setHeaterRegulationActive(false);
     }
 
     @RequestMapping(value = "/pressure/{pressure}", method = RequestMethod.POST)
     public void setPressure(@PathVariable int pressure) {
         LOGGER.info("setPressure " + pressure);
-        try {
-            commandRunner.setPressure(pressure);
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
+        simulatedJuekeStatus.setActualPressureCell(pressure);
     }
 
     @RequestMapping(value = "/valves/{valve}", method = RequestMethod.POST)
     public void setValve(@PathVariable int valve, @RequestParam("state") String state) {
         LOGGER.info("setValve " + valve);
-        try {
-            commandRunner.setValve(valve, state);
-        } catch (Exception e) {
-            LOGGER.error("", e);
+        boolean valveStateAsBoolean = false;
+        if (state.equalsIgnoreCase("enable")) {
+            valveStateAsBoolean = true;
         }
+        if (state.equalsIgnoreCase("disable")) {
+            valveStateAsBoolean = false;
+        }
+        if (valve == 1) {
+            simulatedJuekeStatus.setValveStatus1(valveStateAsBoolean);
+        }
+        if (valve == 2) {
+            simulatedJuekeStatus.setValveStatus2(valveStateAsBoolean);
+        }
+        if (valve == 3) {
+            simulatedJuekeStatus.setValveStatus3(valveStateAsBoolean);
+        }
+        if (valve == 4) {
+            simulatedJuekeStatus.setValveStatus4(valveStateAsBoolean);
+        }
+        if (valve == 5) {
+            simulatedJuekeStatus.setValveStatus5(valveStateAsBoolean);
+        }
+        if (valve == 6) {
+            simulatedJuekeStatus.setValveStatus6(valveStateAsBoolean);
+        }
+        if (valve == 7) {
+            simulatedJuekeStatus.setValveStatus7(valveStateAsBoolean);
+        }
+        if (valve == 8) {
+            simulatedJuekeStatus.setValveStatus8(valveStateAsBoolean);
+        }
+
     }
 
     @Autowired
-    public void setCommandRunner(CommandRunner commandRunner) {
-        this.commandRunner = commandRunner;
+    public void setSimulatedJuekeStatus(SimulatedJuekeStatus simulatedJuekeStatus) {
+        this.simulatedJuekeStatus = simulatedJuekeStatus;
     }
 }
