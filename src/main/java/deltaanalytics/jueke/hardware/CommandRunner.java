@@ -82,12 +82,9 @@ public class CommandRunner {
         String valveStatesToString = valveStateDto.valveStatesToString();
         LOGGER.info("------------------------------");
         LOGGER.info(valveStatesToString);
-        LOGGER.info(juekeStatus.toString());
-        LOGGER.info(valveStateDto.toString());
         byte parseByte = (byte) Integer.parseInt(valveStatesToString, 2);
         LOGGER.info("parseByte " + parseByte);
         juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_VALVES, parseByte, (byte) 0, (byte) 0, (byte) 0), 0, false);
-
         LOGGER.info("setValve end");
     }
 

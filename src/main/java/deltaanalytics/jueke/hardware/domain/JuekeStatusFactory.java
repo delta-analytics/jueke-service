@@ -21,9 +21,6 @@ public class JuekeStatusFactory {
         juekeStatus.setErrorFlags(b1[4]);
         juekeStatus.setErrorCode(new Byte(b1[4]).intValue());
 
-        LOGGER.info("__________!____________!___________");
-        LOGGER.info(String.valueOf(b1[6]));
-        LOGGER.info(javax.xml.bind.DatatypeConverter.printHexBinary(b1));
         addValveStatus(juekeStatus, new byte[]{b1[6]});
 
         juekeStatus.setPowerHeater(b1[7]);
