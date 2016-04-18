@@ -1,15 +1,12 @@
 package deltaanalytics.jueke.hardware.domain;
 
 import deltaanalytics.jueke.data.entity.JuekeStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
 public class JuekeStatusFactory {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JuekeStatusFactory.class);
 
     public JuekeStatus build(byte[] b1) {
         JuekeStatus juekeStatus = new JuekeStatus();
