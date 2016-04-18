@@ -71,12 +71,20 @@ public class ValveStateDto {
     }
 
     public void setValveState8(int valveState8) {
-        this.valveState8 = valveState8;
+
     }
 
     public String valveStatesToString() {
-
-        return String.valueOf(valveState1 + valveState2 + valveState3 + valveState4 + valveState5 + valveState6 + valveState7 + valveState8);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(valveState8);
+        stringBuilder.append(valveState7);
+        stringBuilder.append(valveState6);
+        stringBuilder.append(valveState5);
+        stringBuilder.append(valveState4);
+        stringBuilder.append(valveState3);
+        stringBuilder.append(valveState2);
+        stringBuilder.append(valveState1);
+        return stringBuilder.toString();
     }
 
     @Override

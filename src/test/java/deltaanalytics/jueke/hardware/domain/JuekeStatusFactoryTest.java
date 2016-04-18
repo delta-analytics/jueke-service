@@ -61,12 +61,12 @@ public class JuekeStatusFactoryTest {
         juekeStatus.setErrorFlags((byte) 10);
         juekeStatus.setErrorCode(10);
         juekeStatus.setValveStatus1(false);
-        juekeStatus.setValveStatus2(false);
+        juekeStatus.setValveStatus2(true);
         juekeStatus.setValveStatus3(false);
-        juekeStatus.setValveStatus4(false);
-        juekeStatus.setValveStatus5(true);
+        juekeStatus.setValveStatus4(true);
+        juekeStatus.setValveStatus5(false);
         juekeStatus.setValveStatus6(false);
-        juekeStatus.setValveStatus7(true);
+        juekeStatus.setValveStatus7(false);
         juekeStatus.setValveStatus8(false);
         juekeStatus.setPowerHeater((byte) 10);
         juekeStatus.setActualTempHeater(25.7);

@@ -1,12 +1,16 @@
 package deltaanalytics.jueke.hardware.domain;
 
 import deltaanalytics.jueke.data.entity.JuekeStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
 public class JuekeStatusFactory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JuekeStatusFactory.class);
+
     public JuekeStatus build(byte[] b1) {
         JuekeStatus juekeStatus = new JuekeStatus();
         juekeStatus.setStart(b1[0]);
@@ -16,6 +20,10 @@ public class JuekeStatusFactory {
 
         juekeStatus.setErrorFlags(b1[4]);
         juekeStatus.setErrorCode(new Byte(b1[4]).intValue());
+
+        LOGGER.info("__________!____________!___________");
+        LOGGER.info(String.valueOf(b1[6]));
+        LOGGER.info(javax.xml.bind.DatatypeConverter.printHexBinary(b1));
         addValveStatus(juekeStatus, new byte[]{b1[6]});
 
         juekeStatus.setPowerHeater(b1[7]);
@@ -44,14 +52,14 @@ public class JuekeStatusFactory {
 
     private void addValveStatus(JuekeStatus juekeStatus, byte[] valveBytes) {
         boolean[] bits = byteArray2BitArray(valveBytes);
-        juekeStatus.setValveStatus1(bits[0]);
-        juekeStatus.setValveStatus2(bits[1]);
-        juekeStatus.setValveStatus3(bits[2]);
-        juekeStatus.setValveStatus4(bits[3]);
-        juekeStatus.setValveStatus5(bits[4]);
-        juekeStatus.setValveStatus6(bits[5]);
-        juekeStatus.setValveStatus7(bits[6]);
-        juekeStatus.setValveStatus8(bits[7]);
+        juekeStatus.setValveStatus1(bits[7]);
+        juekeStatus.setValveStatus2(bits[6]);
+        juekeStatus.setValveStatus3(bits[5]);
+        juekeStatus.setValveStatus4(bits[4]);
+        juekeStatus.setValveStatus5(bits[3]);
+        juekeStatus.setValveStatus6(bits[2]);
+        juekeStatus.setValveStatus7(bits[1]);
+        juekeStatus.setValveStatus8(bits[0]);
     }
 
     private boolean[] byteArray2BitArray(byte[] bytes) {
