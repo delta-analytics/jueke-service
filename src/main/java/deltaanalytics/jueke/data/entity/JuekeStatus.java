@@ -85,11 +85,10 @@ public class JuekeStatus {
     }
 
     public boolean isStatusOfPump() {
-        return statusOfPump;
+        return pumpPower > 0;
     }
 
     public void setStatusOfPump(boolean statusOfPump) {
-        this.statusOfPump = statusOfPump;
     }
 
     public boolean isPressureRegulationActive() {
