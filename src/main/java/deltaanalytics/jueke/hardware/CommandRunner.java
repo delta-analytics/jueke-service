@@ -10,6 +10,7 @@ import deltaanalytics.jueke.hardware.serial.JuekeSerialConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
@@ -125,10 +126,14 @@ public class CommandRunner {
         juekeSerialConnectionFactory.execute(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.SET_PRESSURE_SETPOINT, (byte) (pressure & 0xff), (byte) ((pressure >> 8) & 0xff), (byte) 0, (byte) 0), 0, false);
     }
 
-    public JuekeStatus getStatus() throws Exception {
+    @Scheduled(fixedRate = 1000)
+    private void calculateStatus() throws Exception {
         JuekeStatus juekeStatus = juekeStatusFactory.build(juekeSerialConnectionFactory.execute(null, 26, true));
         juekeStatusRepository.save(juekeStatus);
-        return juekeStatus;
+    }
+
+    public JuekeStatus getStatus() throws Exception {
+        return juekeStatusFactory.build(juekeSerialConnectionFactory.execute(null, 26, true));
     }
 
     public void startPressureRegulation() throws Exception {
