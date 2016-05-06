@@ -22,7 +22,7 @@ public class GetStatusController {
 
     @RequestMapping("/status")
     public JuekeStatus getStatus() {
-        LOGGER.info("status");
+        LOGGER.info("getStatus");
         JuekeStatus result;
         try {
             result = commandRunner.getStatus();
