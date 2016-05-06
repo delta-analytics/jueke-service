@@ -133,7 +133,7 @@ public class CommandRunner {
     }
 
     public JuekeStatus getStatus() throws Exception {
-        return juekeStatusFactory.build(juekeSerialConnectionFactory.execute(null, 26, true));
+        return juekeStatusRepository.findTop1OrderByIdDesc();
     }
 
     public void startPressureRegulation() throws Exception {

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface JuekeStatusRepository extends JpaRepository<JuekeStatus, Long> {
     List<JuekeStatus> findAllByStatusDateTimeBetween(LocalDateTime start, LocalDateTime end);
+    JuekeStatus findTop1OrderByIdDesc();
 }
