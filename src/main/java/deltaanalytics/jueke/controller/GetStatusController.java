@@ -22,9 +22,23 @@ public class GetStatusController {
 
     @RequestMapping("/status")
     public JuekeStatus getStatus() {
+        LOGGER.info("status");
         JuekeStatus result;
         try {
             result = commandRunner.getStatus();
+        } catch (Exception e) {
+            LOGGER.error("", e);
+            result = new JuekeStatus();
+        }
+        return result;
+    }
+
+    @RequestMapping("/statusDirectFromHardware")
+    public JuekeStatus getStatusDirectFromHardware() {
+        LOGGER.info("getStatusDirectFromHardware");
+        JuekeStatus result;
+        try {
+            result = commandRunner.getStatusDirectFromHardware();
         } catch (Exception e) {
             LOGGER.error("", e);
             result = new JuekeStatus();

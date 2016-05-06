@@ -132,6 +132,10 @@ public class CommandRunner {
         juekeStatusRepository.save(juekeStatus);
     }
 
+    public JuekeStatus getStatusDirectFromHardware() throws Exception {
+        return juekeStatusFactory.build(juekeSerialConnectionFactory.execute(null, 26, true));
+    }
+
     public JuekeStatus getStatus() throws Exception {
         return juekeStatusRepository.findTop1OrderByIdDesc();
     }
