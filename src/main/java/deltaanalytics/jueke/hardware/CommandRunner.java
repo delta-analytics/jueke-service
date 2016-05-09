@@ -137,7 +137,7 @@ public class CommandRunner {
     }
 
     public JuekeStatus getStatus() throws Exception {
-        return juekeStatusRepository.findTop1OrderByIdDesc();
+        return juekeStatusRepository.findFirst1ByOrderByIdDesc();
     }
 
     public void startPressureRegulation() throws Exception {
