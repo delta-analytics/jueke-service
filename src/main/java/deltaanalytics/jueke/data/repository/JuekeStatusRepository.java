@@ -7,6 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface JuekeStatusRepository extends JpaRepository<JuekeStatus, Long> {
-    List<JuekeStatus> findAllByStatusDateTimeBetween(LocalDateTime start, LocalDateTime end);
+    List<JuekeStatus> findByStatusDateTimeBetween(LocalDateTime start, LocalDateTime end);
     JuekeStatus findFirst1ByOrderByIdDesc();
 }

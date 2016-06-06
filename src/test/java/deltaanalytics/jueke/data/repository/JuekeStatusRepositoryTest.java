@@ -9,6 +9,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,13 +49,29 @@ public class JuekeStatusRepositoryTest {
     }
 
     @Test
-    public void findAllBetweenDates() {
+    public void findBetweenDatesTwoDatesOneMatch() throws InterruptedException {
         JuekeStatus juekeStatus = new JuekeStatus();
-        LocalDateTime localDateTimeNow = LocalDateTime.now();
-        LocalDateTime localDateTimeOneMonthAgo = localDateTimeNow.minusMonths(1);
-        juekeStatus.setStatusDateTime(localDateTimeNow);
-        juekeStatusRepository.save(juekeStatus);
+        JuekeStatus juekeStatus2 = new JuekeStatus();
+        juekeStatus2.setActualTempHeater(99.99);
 
-        assertThat(juekeStatusRepository.findAllByStatusDateTimeBetween(localDateTimeOneMonthAgo, localDateTimeNow.plusDays(2)).size(), is(equalTo(1)));
+        juekeStatusRepository.saveAndFlush(juekeStatus);
+        Thread.sleep(200);
+        LocalDateTime localDateTimeAfterSleep = LocalDateTime.now();
+        juekeStatusRepository.save(juekeStatus2);
+
+        List<JuekeStatus> byStatusDateTimeBetween = juekeStatusRepository.findByStatusDateTimeBetween(localDateTimeAfterSleep, LocalDateTime.now().plusDays(2));
+        assertThat(byStatusDateTimeBetween.size(), is(1));
+        assertThat(byStatusDateTimeBetween.get(0), is(juekeStatus2));
+    }
+
+    @Test
+    public void findBetweenDatesTwoDatesTwoMatches() {
+        JuekeStatus juekeStatus = new JuekeStatus();
+        JuekeStatus juekeStatus2 = new JuekeStatus();
+
+        juekeStatusRepository.save(juekeStatus);
+        juekeStatusRepository.save(juekeStatus2);
+
+        assertThat(juekeStatusRepository.findByStatusDateTimeBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now().plusDays(2)).size(), is(2));
     }
 }
