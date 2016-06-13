@@ -1,6 +1,6 @@
 package deltaanalytics.jueke.hardware;
 
-import deltaanalytics.jueke.data.ValveStateDto;
+import deltaanalytics.jueke.data.dto.ValveStateDto;
 import deltaanalytics.jueke.data.entity.JuekeStatus;
 import deltaanalytics.jueke.data.repository.JuekeStatusRepository;
 import deltaanalytics.jueke.hardware.domain.JuekeStatusFactory;

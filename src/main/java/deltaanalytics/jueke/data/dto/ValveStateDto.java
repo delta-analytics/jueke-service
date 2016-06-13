@@ -1,4 +1,4 @@
-package deltaanalytics.jueke.data;
+package deltaanalytics.jueke.data.dto;
 
 public class ValveStateDto {
     private int valveState1;

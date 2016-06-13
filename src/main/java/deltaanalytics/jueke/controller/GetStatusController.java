@@ -1,5 +1,6 @@
 package deltaanalytics.jueke.controller;
 
+import deltaanalytics.jueke.data.dto.JuekeMathParametersDto;
 import deltaanalytics.jueke.data.entity.JuekeStatus;
 import deltaanalytics.jueke.data.repository.JuekeStatusRepository;
 import deltaanalytics.jueke.hardware.CommandRunner;
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -56,12 +56,12 @@ public class GetStatusController {
     }
 
     @RequestMapping(value = "/statusMiddled")
-    public JuekeStatus fetchResult(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime startDate,
-                                   @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime endDate) {
+    public JuekeMathParametersDto fetchResult(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime startDate,
+                                              @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime endDate) {
         LOGGER.info("statusMiddled " + startDate + " <-> " + endDate);
         List<JuekeStatus> juekeStatuses = juekeStatusRepository.findByStatusDateTimeBetween(startDate, endDate);
         LOGGER.info("juekeStatuses between count " + juekeStatuses.size());
-        JuekeStatus result = new JuekeStatus();
+        JuekeMathParametersDto result = new JuekeMathParametersDto();
         double averageTemp = juekeStatuses
                 .stream()
                 .mapToDouble(JuekeStatus::getActualTempHeater)
@@ -72,8 +72,10 @@ public class GetStatusController {
                 .mapToDouble(JuekeStatus::getActualPressureCell)
                 .average()
                 .getAsDouble();
-        result.setActualTempHeater(averageTemp);
-        result.setActualPressureCell(averagePressure);
+        result.setTemp(averageTemp);
+        result.setpAtm(averagePressure);
+        result.setStartDateTime(startDate);
+        result.setEndDateTime(endDate);
         LOGGER.info("average ActualTempHeater=" + averageTemp);
         LOGGER.info("average ActualPressureCell=" + averagePressure);
         return result;
