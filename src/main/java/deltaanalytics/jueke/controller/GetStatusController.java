@@ -3,6 +3,7 @@ package deltaanalytics.jueke.controller;
 import deltaanalytics.jueke.data.dto.JuekeMathParametersDto;
 import deltaanalytics.jueke.data.entity.JuekeStatus;
 import deltaanalytics.jueke.data.repository.JuekeStatusRepository;
+import deltaanalytics.jueke.data.service.AverageTempAndPressureCalculator;
 import deltaanalytics.jueke.hardware.CommandRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,8 @@ public class GetStatusController {
     private CommandRunner commandRunner;
     @Autowired
     private JuekeStatusRepository juekeStatusRepository;
+    @Autowired
+    private AverageTempAndPressureCalculator averageTempAndPressureCalculator;
 
     @RequestMapping("/status")
     public JuekeStatus getStatus() {
@@ -61,23 +64,11 @@ public class GetStatusController {
         LOGGER.info("statusMiddled " + startDate + " <-> " + endDate);
         List<JuekeStatus> juekeStatuses = juekeStatusRepository.findByStatusDateTimeBetween(startDate, endDate);
         LOGGER.info("juekeStatuses between count " + juekeStatuses.size());
-        JuekeMathParametersDto result = new JuekeMathParametersDto();
-        double averageTemp = juekeStatuses
-                .stream()
-                .mapToDouble(JuekeStatus::getActualTempHeater)
-                .average()
-                .getAsDouble();
-        double averagePressure = juekeStatuses
-                .stream()
-                .mapToDouble(JuekeStatus::getActualPressureCell)
-                .average()
-                .getAsDouble();
-        result.setTemp(averageTemp);
-        result.setpAtm(averagePressure);
+        JuekeMathParametersDto result = averageTempAndPressureCalculator.run(juekeStatuses);
+        LOGGER.info("average ActualTempHeater=" + result.getTemp());
+        LOGGER.info("average ActualPressureCell=" + result.getpAtm());
         result.setStartDateTime(startDate);
         result.setEndDateTime(endDate);
-        LOGGER.info("average ActualTempHeater=" + averageTemp);
-        LOGGER.info("average ActualPressureCell=" + averagePressure);
         return result;
     }
 
