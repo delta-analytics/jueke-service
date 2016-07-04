@@ -1,7 +1,6 @@
 package deltaanalytics.jueke.hardware.serial;
 // imports from RXTX package
 
-import deltaanalytics.jueke.hardware.domain.Checksum;
 import deltaanalytics.jueke.hardware.domain.JuekeWhiteCellCommandNumber;
 import deltaanalytics.jueke.hardware.domain.JuekeWhiteCellMessage;
 import gnu.io.CommPort;
@@ -9,6 +8,7 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -20,6 +20,8 @@ public class JuekeSerialConnectionFactory {
     private static InputStream in;
     private static OutputStream out;
     private static SerialPort serialPort;
+    @Autowired
+    private JuekeSerialPortEventListener juekeSerialPortEventListener;
 
     //Example serialPortName "/dev/tty.usbserial-J0000031" for MacOsx
     public synchronized void establishConnection(String serialPortName) {
@@ -35,6 +37,9 @@ public class JuekeSerialConnectionFactory {
                     serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);  // Default Jüke
                     in = serialPort.getInputStream();
                     out = serialPort.getOutputStream();
+                    juekeSerialPortEventListener.setIn(in);
+                    serialPort.addEventListener(juekeSerialPortEventListener);
+                    serialPort.notifyOnDataAvailable(true);
                     LOGGER.info("input and output stream opened");
                 } else {
                     LOGGER.error("Error: Only serial ports are handled by this example.");
@@ -58,40 +63,23 @@ public class JuekeSerialConnectionFactory {
         }
     }
 
-    public synchronized byte[] execute(JuekeWhiteCellMessage juekeWhiteCellMessage, int expectedResultLength, boolean onlyStatusRequest) throws Exception {
-        if (in == null || out == null) {
-            throw new RuntimeException("You have to establishConnection before the first execution!");
-        }
+    public synchronized byte[] executeCommand(JuekeWhiteCellMessage juekeWhiteCellMessage) throws Exception {
         LOGGER.info("Start to jueke");
         byte[] buffer = new byte[0];
         out.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_COM).toByteArray());
-
-        if (onlyStatusRequest) {
-            int data;
-            buffer = new byte[expectedResultLength];
-            int len = 0;
-            LOGGER.info("read Response");
-            while ((data = in.read()) > -1) {
-                buffer[len++] = (byte) data;
-                if (len == expectedResultLength) {
-                    LOGGER.info("", buffer);
-                    Checksum checkSum = new Checksum();
-                    if (checkSum.checkForConsistency(buffer)) {
-                        LOGGER.info("Checksum Ok");
-                    } else {
-                        throw new RuntimeException("Checksum wrong");
-                    }
-                    break;
-                }
-            }
-        } else {
-            LOGGER.info("Execute Command (not only Status Request)");
-            out.write(juekeWhiteCellMessage.toByteArray());
-        }
-
+        LOGGER.info("send command");
+        out.write(juekeWhiteCellMessage.toByteArray());
         LOGGER.info("Stop to jueke");
         out.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_COM).toByteArray());
+        LOGGER.info("", buffer);
         return buffer;
+    }
+
+    public synchronized void getStatus() throws Exception {
+        LOGGER.info("Start to jueke");
+        out.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_COM).toByteArray());
+        LOGGER.info("Stop to jueke");
+        out.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_COM).toByteArray());
     }
 
 }

@@ -40,19 +40,6 @@ public class GetStatusController {
         return result;
     }
 
-    @RequestMapping("/statusDirectFromHardware")
-    public JuekeStatus getStatusDirectFromHardware() {
-        LOGGER.info("getStatusDirectFromHardware");
-        JuekeStatus result;
-        try {
-            result = commandRunner.getStatusDirectFromHardware();
-        } catch (Exception e) {
-            LOGGER.error("", e);
-            result = new JuekeStatus();
-        }
-        return result;
-    }
-
     @RequestMapping("/statuses")
     public List<JuekeStatus> getStatuses() {
         return juekeStatusRepository.findAll();
