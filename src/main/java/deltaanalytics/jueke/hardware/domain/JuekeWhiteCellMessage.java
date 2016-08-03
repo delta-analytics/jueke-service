@@ -34,9 +34,9 @@ public class JuekeWhiteCellMessage {
         int crc = (new Checksum()).calculateCRC16CCITT(bytesArrayForCrc);
         byte[] bytes = {start, command, (byte)(data1 & 0xff), data2, data3, data4, stop,
               (byte) ((crc >> 8) & 0xff), (byte) (crc & 0xff)};
-        for (byte aByte : bytes) {
+/*        for (byte aByte : bytes) {
             LOGGER.info(String.valueOf(aByte));
-        }
+        }*/
 
         return bytes;
     }

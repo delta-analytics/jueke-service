@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -65,13 +66,13 @@ public class JuekeStatusRepositoryTest {
     }
 
     @Test
-    public void findBetweenDatesTwoDatesTwoMatches() {
+    public void findBetweenDatesTwoDatesTwoMatches() throws InterruptedException {
         JuekeStatus juekeStatus = new JuekeStatus();
         JuekeStatus juekeStatus2 = new JuekeStatus();
 
         juekeStatusRepository.save(juekeStatus);
         juekeStatusRepository.save(juekeStatus2);
 
-        assertThat(juekeStatusRepository.findByStatusDateTimeBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now().plusDays(2)).size(), is(2));
+        assertThat(juekeStatusRepository.findByStatusDateTimeBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now().plusDays(2)).size(), greaterThanOrEqualTo(2));
     }
 }

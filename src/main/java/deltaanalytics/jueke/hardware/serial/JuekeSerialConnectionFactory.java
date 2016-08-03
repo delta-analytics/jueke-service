@@ -78,6 +78,7 @@ public class JuekeSerialConnectionFactory {
     public synchronized void getStatus() throws Exception {
         LOGGER.info("Start to jueke");
         out.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.START_COM).toByteArray());
+        Thread.sleep(200);  // Jueke fires with 10 Hz
         LOGGER.info("Stop to jueke");
         out.write(new JuekeWhiteCellMessage(JuekeWhiteCellCommandNumber.STOP_COM).toByteArray());
     }
